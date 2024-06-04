@@ -16,9 +16,20 @@
 # As we have a json file with structured data, we can represent data using Pandas
 # Use vectorization techniques to implement formulas
 
+# I used below code snippet and tested the time taken to calculate loss estimate
+# on a dataset with data of million buildings (generated with random values). Time Taken Result - 1 second
+
+# In theory, That is 1/5 th of the time taken to solve the same problem above
+
+# If the dataset is still larger, we can use the concept of chunking in Pandas,
+# which will effectively chunk the whole file into multiple parts effectively also saving the memory consumption
+
+# Attached a file json_generator.py which was used to generate a json file with million property records
+
 
 #### Code Snippet ####
-
+import time
+from math import e
 
 import pandas as pd
 
@@ -56,3 +67,49 @@ def load_data_to_df(file_path: str) -> pd.DataFrame:
         raise FileNotFoundError("File path is invalid")
 
 
+def calculate_estimated_losses_with_pandas(df: pd.DataFrame, years: int = 1) -> float:
+    """
+    This func will calculate the potential financial loss estimate from given Building data using Pandas
+
+    Parameters:
+    df (pd.DataFrame): DataFrame containing the building data.
+    years (int): Number of years over which to calculate the losses.
+
+    Returns:
+    float: Total estimated loss.
+    """
+
+    discount_rate = 0.05  # Assuming a 5% discount rate
+    denominator = (1 + discount_rate) ** years
+
+    # Breaking the formula to make it easier to read and comprehend
+    # Vectorized numerator calculation
+    df['numerator'] = df['construction_cost'] * (e ** (df['inflation_rate'] * df['floor_area'] / 1000)) * df[
+        'hazard_probability']
+
+    # Vectorized estimated losses calculation
+    df['loss_estimate'] = df['numerator'] / denominator
+
+    # Optional: Print estimated loss for each building
+    # for _, row in df.iterrows():
+    #     print(f"Estimated loss for property with id {row['buildingId']} is : ${row['loss_estimate']:.2f}")
+
+    # Total estimated loss
+    total_loss_estimate = df['loss_estimate'].sum()
+
+    return total_loss_estimate
+
+
+# Main execution function
+def main():
+    start_time = time.time()
+    # using dataset with million properties
+    data = load_data_to_df('data_million.json')
+    total_loss_estimate = calculate_estimated_losses_with_pandas(data)
+    print(f"Total Estimated Loss for all properties : ${total_loss_estimate:.2f}")
+    elapsed_time = time.time() - start_time
+    print("Elapsed time : ", time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+
+
+if __name__ == '__main__':
+    main()
