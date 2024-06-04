@@ -1,10 +1,28 @@
 import json
+from pathlib import Path
+
 import math
 
+
+# Check if given file path is valid
+def is_valid_file_path(path: str) -> bool:
+    """
+    Validate if the given string is a valid file path
+
+    :param path: String to validate as file path
+    :return: True if the path is valid and file exists, otherwise False
+    """
+    return Path(path).is_file()
+
+
 # Load and parse the JSON data file
-def load_data(filepath):
-    with open(filepath, 'r') as file:
-        return json.load(file)
+def load_data(filepath: str):
+    if is_valid_file_path(filepath):
+        with open(filepath, 'r') as file:
+            return json.load(file)
+    else:
+        raise FileNotFoundError("File path is invalid")
+
 
 # Calculate total projected loss with additional complexity and errors
 def calculate_projected_losses(building_data):
@@ -34,11 +52,13 @@ def calculate_projected_losses(building_data):
 
     return total_loss
 
+
 # Main execution function
 def main():
     data = load_data('data.json')
     total_projected_loss = calculate_projected_losses(data)
     print(f"Total Projected Loss: ${total_projected_loss:.2f}")
+
 
 if __name__ == '__main__':
     main()
