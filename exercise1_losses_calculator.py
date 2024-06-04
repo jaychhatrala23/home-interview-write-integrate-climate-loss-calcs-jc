@@ -47,6 +47,8 @@ def calculate_projected_losses(building_data: [Building], years: int = 1) -> flo
 def main():
     data = load_data('data.json')
     total_projected_loss = calculate_projected_losses(data)
+    # Example, To calculate total_project_loss for 3 years :
+    # total_projected_loss = calculate_projected_losses(data, years=3)
     print(f"Total Projected Loss: ${total_projected_loss:.2f}")
 
 
