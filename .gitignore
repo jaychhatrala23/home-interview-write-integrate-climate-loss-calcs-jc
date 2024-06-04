@@ -32,3 +32,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Local dirs
+/.idea
+/.DS_Store
+**/__pycache__/**

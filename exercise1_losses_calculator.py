@@ -3,7 +3,14 @@ from utils import load_data
 
 
 # Calculate total projected loss with additional complexity and errors
-def calculate_projected_losses(building_data: [Building]) -> float:
+def calculate_projected_losses(building_data: [Building], years: int = 1) -> float:
+    """
+    This function will calculate the total projected loss for the given building data and number of years
+
+    :param building_data: list of Building Model
+    :param years: Number of years to consider for calculating projected losses, defaults to 1
+    :return: Total projected losses for all buildings
+    """
     total_loss = 0
     for building in building_data:
         # Using Pydantic model fields instead of dict keys will reduce any typo errors making it more explicit
@@ -13,7 +20,8 @@ def calculate_projected_losses(building_data: [Building]) -> float:
         inflation_rate = building.inflation_rate
 
         # Calculate future cost
-        future_cost = construction_cost * (1 + inflation_rate)  
+        # Updating formula to consider inflation over specified number of years
+        future_cost = construction_cost * ((1 + inflation_rate) ** years)
 
         # Calculate risk-adjusted loss
         risk_adjusted_loss = future_cost * (1 - hazard_probability) 
