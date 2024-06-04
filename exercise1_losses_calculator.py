@@ -2,6 +2,33 @@ import json
 from pathlib import Path
 
 import math
+from typing import List
+
+from pydantic import BaseModel, RootModel
+
+
+class Building(BaseModel):
+    """
+    Pydantic model to validate Building Data
+    """
+    buildingId: int
+    floor_area: int
+    construction_cost: int
+    hazard_probability: float
+    inflation_rate: float
+
+
+class BuildingList(RootModel):
+    """
+    Pydantic model to represent list of Building Model
+    """
+    root: List[Building]
+
+    def __iter__(self):
+        return iter(self.root)
+
+    def __getitem__(self, item):
+        return self.root[item]
 
 
 # Check if given file path is valid
@@ -16,10 +43,21 @@ def is_valid_file_path(path: str) -> bool:
 
 
 # Load and parse the JSON data file
-def load_data(filepath: str):
+def load_data(filepath: str) -> BuildingList:
+    """
+    Load Building data from json file and validate as per Building Model
+
+    :param filepath: path to load data from
+    :return: list of Building Model
+    """
     if is_valid_file_path(filepath):
         with open(filepath, 'r') as file:
-            return json.load(file)
+            file_data = json.load(file)
+            try:
+                building_data = BuildingList.model_validate(file_data)
+                return building_data
+            except ValueError as e:
+                raise Exception(f"Failed to validate Building data with error: {e}")
     else:
         raise FileNotFoundError("File path is invalid")
 
