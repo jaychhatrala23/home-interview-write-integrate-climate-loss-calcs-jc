@@ -48,11 +48,11 @@ def load_data_to_df(file_path: str) -> pd.DataFrame:
 
         # Define expected data types
         expected_dtypes = {
-            'buildingId': 'int64',
-            'floor_area': 'int64',
-            'construction_cost': 'int64',
-            'hazard_probability': 'float64',
-            'inflation_rate': 'float64'
+            "buildingId": "int64",
+            "floor_area": "int64",
+            "construction_cost": "int64",
+            "hazard_probability": "float64",
+            "inflation_rate": "float64",
         }
 
         # Validate and convert data types
@@ -84,18 +84,21 @@ def calculate_estimated_losses_with_pandas(df: pd.DataFrame, years: int = 1) -> 
 
     # Breaking the formula to make it easier to read and comprehend
     # Vectorized numerator calculation
-    df['numerator'] = df['construction_cost'] * (e ** (df['inflation_rate'] * df['floor_area'] / 1000)) * df[
-        'hazard_probability']
+    df["numerator"] = (
+        df["construction_cost"]
+        * (e ** (df["inflation_rate"] * df["floor_area"] / 1000))
+        * df["hazard_probability"]
+    )
 
     # Vectorized estimated losses calculation
-    df['loss_estimate'] = df['numerator'] / denominator
+    df["loss_estimate"] = df["numerator"] / denominator
 
     # Optional: Print estimated loss for each building
     # for _, row in df.iterrows():
     #     print(f"Estimated loss for property with id {row['buildingId']} is : ${row['loss_estimate']:.2f}")
 
     # Total estimated loss
-    total_loss_estimate = df['loss_estimate'].sum()
+    total_loss_estimate = df["loss_estimate"].sum()
 
     return total_loss_estimate
 
@@ -104,12 +107,12 @@ def calculate_estimated_losses_with_pandas(df: pd.DataFrame, years: int = 1) -> 
 def main():
     start_time = time.time()
     # using dataset with million properties
-    data = load_data_to_df('data_million.json')
+    data = load_data_to_df("data_million.json")
     total_loss_estimate = calculate_estimated_losses_with_pandas(data)
     print(f"Total Estimated Loss for all properties : ${total_loss_estimate:.2f}")
     elapsed_time = time.time() - start_time
     print("Elapsed time : ", time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

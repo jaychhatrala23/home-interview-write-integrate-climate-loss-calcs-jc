@@ -22,12 +22,18 @@ def calculate_estimated_losses(building_data: [Building], years: int = 1) -> flo
         discount_rate = 0.05  # Assuming a 5% discount rate
 
         # Breaking the formula to make it easier to read and comprehend
-        numerator = construction_cost * (e ** (inflation_rate * floor_area / 1000)) * hazard_probability
+        numerator = (
+            construction_cost
+            * (e ** (inflation_rate * floor_area / 1000))
+            * hazard_probability
+        )
         denominator = (1 + discount_rate) ** years
 
         loss_estimate = numerator / denominator
 
-        print(f"Estimated loss for property with id {building_id} is : ${loss_estimate:.2f}")
+        print(
+            f"Estimated loss for property with id {building_id} is : ${loss_estimate:.2f}"
+        )
 
         total_loss_estimate += loss_estimate
 
@@ -36,10 +42,10 @@ def calculate_estimated_losses(building_data: [Building], years: int = 1) -> flo
 
 # Main execution function
 def main():
-    data = load_data('data.json')
+    data = load_data("data.json")
     total_estimated_loss = calculate_estimated_losses(data)
     print(f"Total Estimated Loss for all properties : ${total_estimated_loss:.2f}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

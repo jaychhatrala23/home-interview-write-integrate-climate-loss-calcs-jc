@@ -7,6 +7,7 @@ class Building(BaseModel):
     """
     Pydantic model to validate Building Data
     """
+
     buildingId: int
     floor_area: int
     construction_cost: int
@@ -18,6 +19,7 @@ class BuildingList(RootModel):
     """
     Pydantic model to represent list of Building Model
     """
+
     root: List[Building]
 
     def __iter__(self):

@@ -24,7 +24,7 @@ def load_data(filepath: str) -> BuildingList:
     :return: list of Building Model
     """
     if is_valid_file_path(filepath):
-        with open(filepath, 'r') as file:
+        with open(filepath, "r") as file:
             file_data = json.load(file)
             try:
                 building_data = BuildingList.model_validate(file_data)
