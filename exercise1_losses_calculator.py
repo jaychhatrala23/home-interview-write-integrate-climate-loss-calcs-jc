@@ -32,12 +32,13 @@ def calculate_projected_losses(building_data: [Building], years: int = 1) -> flo
         # updated formula to consider specified number of years
         present_value_loss = risk_adjusted_loss / ((1 + discount_rate) ** years)
 
-        # Calculate maintenance and total maintenance cost
-        maintenance_cost = floor_area * 50  # assuming a flat rate per square meter
-        total_maintenance_cost = maintenance_cost / (1 + discount_rate)  
+        # Calculate maintenance and total maintenance
+        # This block is irrelevant as there are no mentions of maintenance cost to consider in given description
+        # maintenance_cost = floor_area * 50  # assuming a flat rate per square meter
+        # total_maintenance_cost = maintenance_cost / (1 + discount_rate)
 
         # Total loss calculation
-        total_loss += present_value_loss + total_maintenance_cost
+        total_loss += present_value_loss
 
     return total_loss
 
