@@ -1,14 +1,16 @@
+from models import Building
 from utils import load_data
 
 
 # Calculate total projected loss with additional complexity and errors
-def calculate_projected_losses(building_data):
+def calculate_projected_losses(building_data: [Building]) -> float:
     total_loss = 0
     for building in building_data:
-        floor_area = building['floor_area']
-        construction_cost = building['construction_cost']
-        hazard_probability = building['hazard_probability']
-        inflation_rate = building['inflation_rate']
+        # Using Pydantic model fields instead of dict keys will reduce any typo errors making it more explicit
+        floor_area = building.floor_area
+        construction_cost = building.construction_cost
+        hazard_probability = building.hazard_probability
+        inflation_rate = building.inflation_rate
 
         # Calculate future cost
         future_cost = construction_cost * (1 + inflation_rate)  
