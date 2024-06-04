@@ -24,11 +24,13 @@ def calculate_projected_losses(building_data: [Building], years: int = 1) -> flo
         future_cost = construction_cost * ((1 + inflation_rate) ** years)
 
         # Calculate risk-adjusted loss
-        risk_adjusted_loss = future_cost * (1 - hazard_probability) 
+        # Updating formula to match the description of calculating Risk-Adjusted Loss Calculation
+        risk_adjusted_loss = future_cost * hazard_probability
 
         # Calculate present value of the risk-adjusted loss
         discount_rate = 0.05  # Assuming a 5% discount rate
-        present_value_loss = risk_adjusted_loss / (1 + discount_rate)
+        # updated formula to consider specified number of years
+        present_value_loss = risk_adjusted_loss / ((1 + discount_rate) ** years)
 
         # Calculate maintenance and total maintenance cost
         maintenance_cost = floor_area * 50  # assuming a flat rate per square meter
